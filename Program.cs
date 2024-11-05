@@ -81,3 +81,19 @@ void seedTasks()
     task2.Todos.Add(todo6);
     db.SaveChanges();
 }
+
+void printIncompleteTasksAndTodos()
+{
+    using (BloggingContext context = new())
+    {
+        var tasks = context.Tasks.Include(Task => Task.Todos).Where(Task => Task.Todos.Any(Todo => Todo.IsComplete == false));
+        foreach (var task in tasks)
+        {
+            Console.WriteLine($"Task: {task.Name}");
+            foreach (var todo in task.Todos)
+            {
+                Console.WriteLine($"- {todo.Name}");
+            }
+        }
+    }
+}
