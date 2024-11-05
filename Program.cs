@@ -46,6 +46,8 @@ using (BloggingContext context = new())
     }
 }
 
+seedWorkers();
+
 void seedTasks()
 {
     var task = new Task { Name = "Produce software" };
@@ -96,4 +98,61 @@ void printIncompleteTasksAndTodos()
             }
         }
     }
+}
+
+void seedWorkers()
+{
+    var team = new Team { Name = "Frontend" };
+    var team2 = new Team { Name = "Backend" };
+    var team3 = new Team { Name = "Testere" };
+
+    db.Teams.Add(team);
+    db.Teams.Add(team2);
+    db.Teams.Add(team3);
+    db.SaveChanges();
+
+    //we dont do loops in this household >:(
+    var worker = new Worker { Name = "Steen Secher" };
+    var worker2 = new Worker { Name = "Ejvind Møller" };
+    var worker3 = new Worker { Name = "Konrad Sommer" };
+    var worker4 = new Worker { Name = "Sofus Lotus" };
+    var worker5 = new Worker { Name = "Remo Lademann" };
+    var worker6 = new Worker { Name = "Ella Fanth" };
+    var worker7 = new Worker { Name = "Anne Dam" };
+
+    db.Workers.Add(worker);
+    db.Workers.Add(worker2);
+    db.Workers.Add(worker3);
+    db.Workers.Add(worker4);
+    db.Workers.Add(worker5);
+    db.Workers.Add(worker6);
+    db.Workers.Add(worker7);
+
+    db.SaveChanges();
+
+    var teamWorker = new TeamWorker { TeamId = team.TeamId, WorkerId = worker.WorkerId };
+    var teamWorker2 = new TeamWorker { TeamId = team.TeamId, WorkerId = worker2.WorkerId };
+    var teamWorker3 = new TeamWorker { TeamId = team.TeamId, WorkerId = worker3.WorkerId };
+
+    var teamWorker4 = new TeamWorker { TeamId = team2.TeamId, WorkerId = worker4.WorkerId };
+    var teamWorker5 = new TeamWorker { TeamId = team2.TeamId, WorkerId = worker5.WorkerId };
+    var teamWorker6 = new TeamWorker { TeamId = team2.TeamId, WorkerId = worker3.WorkerId };
+
+    var teamWorker7 = new TeamWorker { TeamId = team3.TeamId, WorkerId = worker6.WorkerId };
+    var teamWorker8 = new TeamWorker { TeamId = team3.TeamId, WorkerId = worker7.WorkerId };
+    var teamWorker9 = new TeamWorker { TeamId = team3.TeamId, WorkerId = worker.WorkerId };
+
+    db.TeamWorkers.Add(teamWorker);
+    db.TeamWorkers.Add(teamWorker2);
+    db.TeamWorkers.Add(teamWorker3);
+
+    db.TeamWorkers.Add(teamWorker4);
+    db.TeamWorkers.Add(teamWorker5);
+    db.TeamWorkers.Add(teamWorker6);
+
+    db.TeamWorkers.Add(teamWorker7);
+    db.TeamWorkers.Add(teamWorker8);
+    db.TeamWorkers.Add(teamWorker9);
+
+    db.SaveChanges();
 }
