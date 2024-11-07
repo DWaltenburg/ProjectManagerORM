@@ -49,9 +49,14 @@ using (BloggingContext context = new())
 
 seedWorkers();
 
+Console.WriteLine();
 PrintTeamsWithoutTasks();
 
+Console.WriteLine();
 PrintTeamCurrentTask();
+
+Console.WriteLine();
+PrintTeamProgress();
 
 void seedTasks()
 {
@@ -76,7 +81,7 @@ void seedTasks()
     var task2 = new Task { Name = "Brew coffee" };
     db.Tasks.Add(task2);
 
-    var todo4 = new Todo { Name = "Pour water", IsComplete = false };
+    var todo4 = new Todo { Name = "Pour water", IsComplete = true };
     db.Todos.Add(todo4);
     task2.Todos.Add(todo4);
 
@@ -94,11 +99,11 @@ void seedTasks()
     var task3 = new Task { Name = "Clean house" };
     db.Tasks.Add(task3);
 
-    var todo7 = new Todo { Name = "Vacuum", IsComplete = false };
+    var todo7 = new Todo { Name = "Vacuum", IsComplete = true };
     db.Todos.Add(todo7);
     task3.Todos.Add(todo7);
 
-    var todo8 = new Todo { Name = "Dust", IsComplete = false };
+    var todo8 = new Todo { Name = "Dust", IsComplete = true };
     db.Todos.Add(todo8);
     task3.Todos.Add(todo8);
 
@@ -223,6 +228,43 @@ void PrintTeamCurrentTask()
             }
             string taskname = team.CurrentTask.Name;
             Console.Write(taskname);
+            Console.WriteLine();
+        }
+    }
+}
+
+void PrintTeamProgress()
+{
+    using (BloggingContext context = new())
+    {
+        var teams = context.Teams.Include(Team => Team.CurrentTask).ThenInclude(Task => Task.Todos);
+        Console.WriteLine("Teams and their progress:");
+        Console.WriteLine("Team        | Progress");
+        Console.WriteLine("------------|-----------------");
+        foreach (var team in teams)
+        {
+            string teamname = team.Name;
+            teamname = teamname.PadRight(12);
+            teamname += "| ";
+            Console.Write(teamname);
+
+
+            int completedTodos = 0;
+            if (team.CurrentTask == null)
+            {
+                Console.Write("No task");
+                Console.WriteLine();
+                continue;
+            }
+            foreach (var todo in team.CurrentTask.Todos)
+            {
+                if (todo.IsComplete)
+                {
+                    completedTodos++;
+                }
+            }
+            double progress = (double)completedTodos / team.CurrentTask.Todos.Count;
+            Console.Write($"{progress:P}");
             Console.WriteLine();
         }
     }
