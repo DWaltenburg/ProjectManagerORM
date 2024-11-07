@@ -64,6 +64,7 @@ void seedTasks()
     var todo3 = new Todo { Name = "Test program", IsComplete = false };
     db.Todos.Add(todo3);
     task.Todos.Add(todo3);
+
     db.SaveChanges();
 
 
@@ -81,6 +82,25 @@ void seedTasks()
     var todo6 = new Todo { Name = "Turn on", IsComplete = false };
     db.Todos.Add(todo6);
     task2.Todos.Add(todo6);
+
+    db.SaveChanges();
+
+
+    var task3 = new Task { Name = "Clean house" };
+    db.Tasks.Add(task3);
+
+    var todo7 = new Todo { Name = "Vacuum", IsComplete = false };
+    db.Todos.Add(todo7);
+    task3.Todos.Add(todo7);
+
+    var todo8 = new Todo { Name = "Dust", IsComplete = false };
+    db.Todos.Add(todo8);
+    task3.Todos.Add(todo8);
+
+    var todo9 = new Todo { Name = "Mop", IsComplete = false };
+    db.Todos.Add(todo9);
+    task3.Todos.Add(todo9);
+
     db.SaveChanges();
 }
 
@@ -102,9 +122,9 @@ void printIncompleteTasksAndTodos()
 
 void seedWorkers()
 {
-    var team = new Team { Name = "Frontend" };
-    var team2 = new Team { Name = "Backend" };
-    var team3 = new Team { Name = "Testere" };
+    var team = new Team { Name = "Frontend", CurrentTask = db.Tasks.Include(Task => Task.Todos).Where(Task => Task.TaskId == 1).First() };
+    var team2 = new Team { Name = "Backend", CurrentTask = db.Tasks.Include(Task => Task.Todos).Where(Task => Task.TaskId == 2).First() };
+    var team3 = new Team { Name = "Testere", CurrentTask = db.Tasks.Include(Task => Task.Todos).Where(Task => Task.TaskId == 3).First() };
 
     db.Teams.Add(team);
     db.Teams.Add(team2);
@@ -112,13 +132,13 @@ void seedWorkers()
     db.SaveChanges();
 
     //we dont do loops in this household >:(
-    var worker = new Worker { Name = "Steen Secher" };
-    var worker2 = new Worker { Name = "Ejvind Møller" };
-    var worker3 = new Worker { Name = "Konrad Sommer" };
-    var worker4 = new Worker { Name = "Sofus Lotus" };
-    var worker5 = new Worker { Name = "Remo Lademann" };
-    var worker6 = new Worker { Name = "Ella Fanth" };
-    var worker7 = new Worker { Name = "Anne Dam" };
+    var worker = new Worker { Name = "Steen Secher", CurrentTodo = team.CurrentTask.Todos[0] };
+    var worker2 = new Worker { Name = "Ejvind Møller", CurrentTodo = team.CurrentTask.Todos[1] };
+    var worker3 = new Worker { Name = "Konrad Sommer", CurrentTodo = team.CurrentTask.Todos[2] };
+    var worker4 = new Worker { Name = "Sofus Lotus", CurrentTodo = team2.CurrentTask.Todos[0] };
+    var worker5 = new Worker { Name = "Remo Lademann", CurrentTodo = team2.CurrentTask.Todos[1] };
+    var worker6 = new Worker { Name = "Ella Fanth", CurrentTodo = team3.CurrentTask.Todos[0] };
+    var worker7 = new Worker { Name = "Anne Dam", CurrentTodo = team3.CurrentTask.Todos[1] };
 
     db.Workers.Add(worker);
     db.Workers.Add(worker2);

@@ -76,11 +76,16 @@ namespace EFGetStarted.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CurrentTaskTaskId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("TeamId");
+
+                    b.HasIndex("CurrentTaskTaskId");
 
                     b.ToTable("Teams");
                 });
@@ -142,11 +147,16 @@ namespace EFGetStarted.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("CurrentTodoTodoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("WorkerId");
+
+                    b.HasIndex("CurrentTodoTodoId");
 
                     b.ToTable("Workers");
                 });
@@ -160,6 +170,17 @@ namespace EFGetStarted.Migrations
                         .IsRequired();
 
                     b.Navigation("Blog");
+                });
+
+            modelBuilder.Entity("Team", b =>
+                {
+                    b.HasOne("Task", "CurrentTask")
+                        .WithMany()
+                        .HasForeignKey("CurrentTaskTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CurrentTask");
                 });
 
             modelBuilder.Entity("TeamWorker1", b =>
@@ -182,6 +203,17 @@ namespace EFGetStarted.Migrations
                     b.HasOne("Task", null)
                         .WithMany("Todos")
                         .HasForeignKey("TaskId");
+                });
+
+            modelBuilder.Entity("Worker", b =>
+                {
+                    b.HasOne("Todo", "CurrentTodo")
+                        .WithMany()
+                        .HasForeignKey("CurrentTodoTodoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CurrentTodo");
                 });
 
             modelBuilder.Entity("Blog", b =>

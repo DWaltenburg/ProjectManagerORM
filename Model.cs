@@ -70,6 +70,7 @@ public class Team
 {
     public int TeamId { get; set; }
     public string Name { get; set; }
+    public Task CurrentTask { get; set; }
     public List<Worker> Workers { get; set; } = new List<Worker>();
 }
 
@@ -77,6 +78,7 @@ public class Worker
 {
     public int WorkerId { get; set; }
     public string Name { get; set; }
+    public Todo CurrentTodo { get; set; }
     public List<Team> Teams { get; set; } = new List<Team>();
 }
 
