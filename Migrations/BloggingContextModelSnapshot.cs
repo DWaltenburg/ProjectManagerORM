@@ -76,7 +76,7 @@ namespace EFGetStarted.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CurrentTaskTaskId")
+                    b.Property<int?>("CurrentTaskTaskId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -147,7 +147,7 @@ namespace EFGetStarted.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CurrentTodoTodoId")
+                    b.Property<int?>("CurrentTodoTodoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -176,9 +176,7 @@ namespace EFGetStarted.Migrations
                 {
                     b.HasOne("Task", "CurrentTask")
                         .WithMany()
-                        .HasForeignKey("CurrentTaskTaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CurrentTaskTaskId");
 
                     b.Navigation("CurrentTask");
                 });
@@ -209,9 +207,7 @@ namespace EFGetStarted.Migrations
                 {
                     b.HasOne("Todo", "CurrentTodo")
                         .WithMany()
-                        .HasForeignKey("CurrentTodoTodoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CurrentTodoTodoId");
 
                     b.Navigation("CurrentTodo");
                 });

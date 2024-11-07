@@ -48,6 +48,8 @@ using (BloggingContext context = new())
 
 seedWorkers();
 
+PrintTeamsWithoutTasks();
+
 void seedTasks()
 {
     var task = new Task { Name = "Produce software" };
@@ -125,10 +127,14 @@ void seedWorkers()
     var team = new Team { Name = "Frontend", CurrentTask = db.Tasks.Include(Task => Task.Todos).Where(Task => Task.TaskId == 1).First() };
     var team2 = new Team { Name = "Backend", CurrentTask = db.Tasks.Include(Task => Task.Todos).Where(Task => Task.TaskId == 2).First() };
     var team3 = new Team { Name = "Testere", CurrentTask = db.Tasks.Include(Task => Task.Todos).Where(Task => Task.TaskId == 3).First() };
+    var team4 = new Team { Name = "DevOps" };
 
     db.Teams.Add(team);
     db.Teams.Add(team2);
     db.Teams.Add(team3);
+    db.SaveChanges();
+
+    db.Teams.Add(team4);
     db.SaveChanges();
 
     //we dont do loops in this household >:(
@@ -175,4 +181,18 @@ void seedWorkers()
     db.TeamWorkers.Add(teamWorker9);
 
     db.SaveChanges();
+}
+
+List<Team> PrintTeamsWithoutTasks()
+{
+    using (BloggingContext context = new())
+    {
+        var teams = context.Teams.Include(Team => Team.CurrentTask).Where(Team => Team.CurrentTask == null).ToList();
+        Console.WriteLine("Teams without tasks:");
+        foreach (var team in teams)
+        {
+            Console.WriteLine($"Team: {team.Name}");
+        }
+        return teams;
+    }
 }
