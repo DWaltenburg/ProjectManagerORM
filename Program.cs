@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security;
 using Microsoft.EntityFrameworkCore;
 
 using var db = new BloggingContext();
@@ -49,6 +50,8 @@ using (BloggingContext context = new())
 seedWorkers();
 
 PrintTeamsWithoutTasks();
+
+PrintTeamCurrentTask();
 
 void seedTasks()
 {
@@ -194,5 +197,33 @@ List<Team> PrintTeamsWithoutTasks()
             Console.WriteLine($"Team: {team.Name}");
         }
         return teams;
+    }
+}
+
+void PrintTeamCurrentTask()
+{
+    using (BloggingContext context = new())
+    {
+        var teams = context.Teams.Include(Team => Team.CurrentTask);
+        Console.WriteLine("Teams and their current task:");
+        Console.WriteLine("Team        | Task");
+        Console.WriteLine("------------|-----------------");
+        foreach (var team in teams)
+        {
+            string teamname = team.Name;
+            teamname = teamname.PadRight(12);
+            teamname += "| ";
+            Console.Write(teamname);
+
+            if (team.CurrentTask == null)
+            {
+                Console.Write("No task");
+                Console.WriteLine();
+                continue;
+            }
+            string taskname = team.CurrentTask.Name;
+            Console.Write(taskname);
+            Console.WriteLine();
+        }
     }
 }
